@@ -48,10 +48,10 @@ const buildingsDatabase: Building[] = [
     },
 ];
 
-async function searchGoogleMaps(search: string): Promise<Building | null> {
+async function searchGoogleMaps(search: string): Promise<Building | undefined> {
     if (!GOOGLE_MAPS_API_KEY) {
         console.error('Google Maps API key is missing');
-        return null;
+        return undefined;
     }
 
     try {
@@ -62,7 +62,7 @@ async function searchGoogleMaps(search: string): Promise<Building | null> {
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`Google Maps API Error: ${response.status} - ${errorText}`);
-            return null;
+            return undefined;
         }
 
         const data = await response.json();
@@ -81,11 +81,11 @@ async function searchGoogleMaps(search: string): Promise<Building | null> {
             };
         } else {
             console.error('Google Maps API returned no results or non-OK status:', data.status);
-            return null;
+            return undefined;
         }
     } catch (error) {
         console.error('Error during Google Maps API call:', error);
-        return null;
+        return undefined;
     }
 }
 
@@ -100,11 +100,11 @@ export async function GET(request: NextRequest) {
     const trimmedSearch = search.toLowerCase().trim();
 
     // 1. Search in the database
-    let building: Building | null = buildingsDatabase.find(b => {
+    let building: Building | undefined = buildingsDatabase.find(b => {
         const nameMatch = b.name.toLowerCase().includes(trimmedSearch);
         const addressMatch = b.address?.toLowerCase().includes(trimmedSearch) || false;
         return nameMatch || addressMatch;
-    }) || null;
+    });
 
     // 2. If not found in database, search Google Maps
     if (!building) {
