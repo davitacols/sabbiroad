@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Database, Search, MapPin } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { MapComponent } from "@/components/map-component"
+// Dynamically import MapComponent to disable SSR
+import dynamic from 'next/dynamic';
 
 type BuildingMetadata = {
   name: string
@@ -21,6 +22,9 @@ type BuildingMetadata = {
     lng: number
   }
 }
+
+// Dynamically import MapComponent with ssr: false
+const MapComponent = dynamic(() => import('@/components/map-component').then(mod => mod.MapComponent), { ssr: false });
 
 export default function MetadataPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -37,13 +41,13 @@ export default function MetadataPage() {
     try {
       const response = await fetch(`/api/metadata?search=${encodeURIComponent(searchTerm)}`)
       if (!response.ok) {
-        throw new Error("'Failed to fetch building metadata'")
+        throw new Error("Failed to fetch building metadata")
       }
       const data = await response.json()
       setMetadata(data)
     } catch (error) {
-      console.error("'Error fetching metadata:'", error)
-      setError("'Failed to fetch building metadata. Please try again.'")
+      console.error("Error fetching metadata:", error)
+      setError("Failed to fetch building metadata. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -99,13 +103,16 @@ export default function MetadataPage() {
                 <div className="font-medium mb-1">Description:</div>
                 <p>{metadata.description}</p>
               </div>
-              <div className="h-64 w-full">
-                <MapComponent 
-                  lat={metadata.coordinates.lat} 
-                  lng={metadata.coordinates.lng} 
-                  name={metadata.name}
-                />
-              </div>
+              {/* Only show MapComponent once it's loaded on the client side */}
+              {metadata.coordinates && (
+                <div className="h-64 w-full">
+                  <MapComponent 
+                    lat={metadata.coordinates.lat} 
+                    lng={metadata.coordinates.lng} 
+                    name={metadata.name}
+                  />
+                </div>
+              )}
             </div>
           )}
         </CardContent>
@@ -113,4 +120,3 @@ export default function MetadataPage() {
     </div>
   )
 }
-

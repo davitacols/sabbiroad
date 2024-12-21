@@ -1,26 +1,42 @@
-"use client"
+"use client";
 
-import React, { useEffect, useRef } from 'react'
-import Link from 'next/link'
-import { ArrowRight, Building, Camera, Upload, Search, Database, Globe, Star, GitBranch, Lock, Check, ArrowUpRight, Users, Sparkles, Building2 } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { ThreeScene } from "@/components/three-scene"
-import { useTheme } from "next-themes"
-import { motion, useScroll, useTransform } from "framer-motion"
+import React, { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { ArrowRight, Building, Camera, Upload, Search, Database, Globe, Star, GitBranch, Lock, Check, ArrowUpRight, Users, Sparkles, Building2 } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { ThreeScene } from "@/components/three-scene";
+import { useTheme } from "next-themes";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Image from 'next/image';
 
-export function HomePage() {
-  const { theme } = useTheme()
-  const containerRef = useRef(null)
+// Type for testimonials
+interface Testimonial {
+  quote: string;
+  author: string;
+  image: string;
+}
+
+// Using placeholder images from Unsplash (for demonstration purposes ONLY)
+const placeholderImages = [
+  "/api/placeholder/48/48",
+  "/api/placeholder/48/48",
+  "/api/placeholder/48/48",
+];
+
+export default function HomePage() {
+  const { theme } = useTheme();
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
-  })
+  });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
+    
     <div className="flex flex-col min-h-screen bg-black" ref={containerRef}>
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-black/70 via-black/50 to-black/80">
@@ -61,6 +77,7 @@ export function HomePage() {
           </div>
         </motion.div>
       </section>
+      
 
       {/* How It Works Section */}
       <section className="py-24 bg-gradient-to-b from-black to-neutral-950">
@@ -248,6 +265,50 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="py-24 bg-gradient-to-t from-neutral-900 to-black">
+          <div className="container mx-auto px-4">
+            {/* ... (Testimonial heading - same as before) */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  quote: "SABIROAD has completely changed our workflow. The speed and accuracy of the analysis are incredible.",
+                  author: "John Doe, Architect at Example Architects",
+                  image: placeholderImages[0],
+                },
+                {
+                  quote: "The detailed reports provided by SABIROAD have saved us countless hours and helped us make data-driven decisions.",
+                  author: "Jane Smith, Engineer at Example Engineering",
+                  image: placeholderImages[1],
+                },
+                {
+                  quote: "SABIROAD is a game changer for the construction industry. It's the future of building analysis.",
+                  author: "Peter Jones, Construction Manager at Example Construction",
+                  image: placeholderImages[2],
+                },
+              ].map((testimonial: Testimonial, index: number) => ( // Type the map function
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="p-6 bg-black/40 backdrop-blur border-white/5 hover:border-white/10 transition-all duration-300">
+                    <div className="flex items-center mb-4">
+                      <Image src={testimonial.image} alt={testimonial.author} width={48} height={48} className="rounded-full mr-4 object-cover" />
+                      <div>
+                        <h4 className="text-lg font-semibold text-white">{testimonial.author}</h4>
+                      </div>
+                    </div>
+                    <p className="text-gray-400 italic">"{testimonial.quote}"</p>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
       {/* Call to Action Section */}
       <section className="py-24 bg-gradient-to-b from-neutral-950 to-black relative overflow-hidden">
         <motion.div
@@ -278,5 +339,3 @@ export function HomePage() {
     </div>
   )
 }
-
-export default HomePage;

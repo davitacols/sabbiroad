@@ -25,14 +25,17 @@ export default function CameraPage() {
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment')
 
   const capture = useCallback(() => {
-    const imageSrc = webcamRef.current?.getScreenshot()
+    const imageSrc = webcamRef.current?.getScreenshot() || null
     setImgSrc(imageSrc)
     setLocationData(null)
     setError(null)
-  }, [webcamRef])
+  }, [])
 
   const processImage = async () => {
-    if (!imgSrc) return
+    if (!imgSrc) {
+      setError("No image captured")
+      return
+    }
 
     setIsProcessing(true)
     setError(null)
@@ -47,7 +50,7 @@ export default function CameraPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to process image")
+        throw new Error(`HTTP error! status: ${response.status}`)
       }
 
       const data = await response.json()
@@ -57,7 +60,7 @@ export default function CameraPage() {
       })
     } catch (err) {
       console.error("Error processing image:", err)
-      setError("Failed to process image. Please try again.")
+      setError(err instanceof Error ? err.message : "Failed to process image. Please try again.")
     } finally {
       setIsProcessing(false)
     }
@@ -86,7 +89,7 @@ export default function CameraPage() {
                 audio={false}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
-                videoConstraints={{ facingMode: facingMode }}
+                videoConstraints={{ facingMode }}
                 className="w-full h-full object-cover"
               />
             ) : (

@@ -1,9 +1,19 @@
 "use client";
 
-import { Building, Twitter, Facebook, Instagram, Linkedin, ArrowRight } from 'lucide-react';
+import { Building, Twitter, Facebook, Instagram, Linkedin, ArrowRight, LucideIcon } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from 'react';
+
+interface QuickLink {
+  label: string;
+  href: string;
+}
+
+interface SocialLink {
+  Icon: LucideIcon;
+  href: string;
+}
 
 export function Footer() {
   const [currentYear, setCurrentYear] = useState<number | null>(null);
@@ -11,6 +21,27 @@ export function Footer() {
   useEffect(() => {
     setCurrentYear(new Date().getFullYear());
   }, []);
+
+  const quickLinks: QuickLink[] = [
+    ['About Us', '/about'],
+    ['Features', '/features'],
+    ['Pricing', '/pricing'],
+    ['Blog', '/blog'],
+    ['Contact', '/contact']
+  ].map(([label, href]) => ({ label, href }));
+
+  const legalLinks: QuickLink[] = [
+    ['Terms of Service', '/terms'],
+    ['Privacy Policy', '/privacy'],
+    ['Cookie Policy', '/cookies']
+  ].map(([label, href]) => ({ label, href }));
+
+  const socialLinks: SocialLink[] = [
+    { Icon: Twitter, href: '#' },
+    { Icon: Facebook, href: '#' },
+    { Icon: Instagram, href: '#' },
+    { Icon: Linkedin, href: '#' }
+  ];
 
   return (
     <footer className="bg-black border-t border-white/5">
@@ -36,13 +67,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-6 text-white">Quick Links</h3>
             <ul className="space-y-3">
-              {[
-                ['About Us', '/about'],
-                ['Features', '/features'],
-                ['Pricing', '/pricing'],
-                ['Blog', '/blog'],
-                ['Contact', '/contact']
-              ].map(([label, href]) => (
+              {quickLinks.map(({ label, href }) => (
                 <li key={href}>
                   <a 
                     href={href} 
@@ -60,11 +85,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-6 text-white">Legal</h3>
             <ul className="space-y-3">
-              {[
-                ['Terms of Service', '/terms'],
-                ['Privacy Policy', '/privacy'],
-                ['Cookie Policy', '/cookies']
-              ].map(([label, href]) => (
+              {legalLinks.map(({ label, href }) => (
                 <li key={href}>
                   <a 
                     href={href} 
@@ -104,12 +125,7 @@ export function Footer() {
             © {currentYear} SABIROAD. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-6 md:mt-0">
-            {[
-              [Twitter, '#'],
-              [Facebook, '#'],
-              [Instagram, '#'],
-              [Linkedin, '#']
-            ].map(([Icon, href], index) => (
+            {socialLinks.map(({ Icon, href }, index) => (
               <a 
                 key={index}
                 href={href} 
