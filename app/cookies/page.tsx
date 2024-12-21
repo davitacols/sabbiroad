@@ -12,7 +12,7 @@ export default function CookiesPage() {
         </p>
         <h2 className="text-2xl font-semibold">2. Why do we use cookies?</h2>
         <p>
-          We use first party and third party cookies for several reasons. Some cookies are required for technical reasons in order for our website to operate, and we refer to these as "essential" or "strictly necessary" cookies. Other cookies enable us to track and target the interests of our users to enhance the experience on our website.
+          We use first-party and third-party cookies for several reasons. Some cookies are required for technical reasons in order for our website to operate, and we refer to these as "essential" or "strictly necessary" cookies. Other cookies enable us to track and target the interests of our users to enhance the experience on our website.
         </p>
         <h2 className="text-2xl font-semibold">3. How can you control cookies?</h2>
         <p>
@@ -27,10 +27,9 @@ export default function CookiesPage() {
         </p>
         <h2 className="text-2xl font-semibold">5. Changes to this Cookie Policy</h2>
         <p>
-          We may update this Cookie Policy from time to time in order to reflect, for example, changes to the cookies we use or for other operational, legal or regulatory reasons. Please therefore re-visit this Cookie Policy regularly to stay informed about our use of cookies and related technologies.
+          We may update this Cookie Policy from time to time in order to reflect, for example, changes to the cookies we use or for other operational, legal, or regulatory reasons. Please therefore re-visit this Cookie Policy regularly to stay informed about our use of cookies and related technologies.
         </p>
       </div>
     </div>
   )
 }
-

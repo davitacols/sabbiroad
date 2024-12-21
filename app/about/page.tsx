@@ -9,9 +9,8 @@ export default function AboutPage() {
         Using advanced machine learning algorithms and computer vision technology, SABIROAD provides instant, accurate identification and classification of buildings and architectural styles.
       </p>
       <p className="text-lg">
-        Whether you're an architect, urban planner, real estate professional, or just an enthusiast of architecture, SABIROAD offers unparalleled insights into the structures that shape our world.
+        Whether you&apos;re an architect, urban planner, real estate professional, or just an enthusiast of architecture, SABIROAD offers unparalleled insights into the structures that shape our world.
       </p>
     </div>
   )
 }
-

@@ -9,37 +9,44 @@ export default function FeaturesPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Upload className="mr-2 h-6 w-6" /> Image Upload
+              <Upload className="mr-2 h-6 w-6" aria-label="Image Upload" />
+              Image Upload
             </CardTitle>
           </CardHeader>
           <CardContent>
             Upload images of buildings for instant classification and analysis using our advanced AI algorithms.
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Camera className="mr-2 h-6 w-6" /> Real-time Camera
+              <Camera className="mr-2 h-6 w-6" aria-label="Real-time Camera" />
+              Real-time Camera
             </CardTitle>
           </CardHeader>
           <CardContent>
             Use your device's camera for real-time building identification, perfect for on-the-go analysis.
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Search className="mr-2 h-6 w-6" /> AI Prediction
+              <Search className="mr-2 h-6 w-6" aria-label="AI Prediction" />
+              AI Prediction
             </CardTitle>
           </CardHeader>
           <CardContent>
             Get accurate predictions on building types and architectural styles using our state-of-the-art machine learning models.
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Database className="mr-2 h-6 w-6" /> Metadata Access
+              <Database className="mr-2 h-6 w-6" aria-label="Metadata Access" />
+              Metadata Access
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -50,4 +57,3 @@ export default function FeaturesPage() {
     </div>
   )
 }
-

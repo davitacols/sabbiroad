@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "'react'"
+import { useEffect, useRef, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { buildingModel } from "'@/services/buildingIdentificationModel'"
+import { buildingModel } from '@/services/buildingIdentificationModel'
 
 interface BuildingClassifierProps {
   imageUrl: string

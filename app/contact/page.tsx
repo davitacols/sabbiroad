@@ -18,7 +18,7 @@ export default function ContactPage() {
     console.log({ name, email, message });
     toast({
       title: "Message Sent",
-      description: "We've received your message and will get back to you soon.",
+      description: "We&apos;ve received your message and will get back to you soon.",
     });
     setName("");
     setEmail("");
@@ -33,7 +33,7 @@ export default function ContactPage() {
             Get in Touch
           </h1>
           <p className="text-lg text-gray-400">
-            We'd love to hear from you. Fill out the form below and we'll respond as soon as possible.
+            We&apos;d love to hear from you. Fill out the form below and we&apos;ll respond as soon as possible.
           </p>
         </div>
 

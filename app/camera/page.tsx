@@ -22,7 +22,7 @@ export default function CameraPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [locationData, setLocationData] = useState<LocationData | null>(null)
-  const [facingMode, setFacingMode] = useState<"'user'" | "'environment'">("'environment'")
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment')
 
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot()
@@ -38,16 +38,16 @@ export default function CameraPage() {
     setError(null)
 
     try {
-      const response = await fetch("'/api/upload'", {
-        method: "'POST'",
+      const response = await fetch("/api/upload", {
+        method: "POST",
         headers: {
-          "'Content-Type'": "'application/json'",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ image: imgSrc }),
       })
 
       if (!response.ok) {
-        throw new Error("'Failed to process image'")
+        throw new Error("Failed to process image")
       }
 
       const data = await response.json()
@@ -56,8 +56,8 @@ export default function CameraPage() {
         coordinates: data.coordinates,
       })
     } catch (err) {
-      console.error("'Error processing image:'", err)
-      setError("'Failed to process image. Please try again.'")
+      console.error("Error processing image:", err)
+      setError("Failed to process image. Please try again.")
     } finally {
       setIsProcessing(false)
     }
@@ -70,7 +70,7 @@ export default function CameraPage() {
   }
 
   const switchCamera = () => {
-    setFacingMode(prevMode => prevMode === "'user'" ? "'environment'" : "'user'")
+    setFacingMode(prevMode => (prevMode === 'user' ? 'environment' : 'user'))
   }
 
   return (
@@ -110,7 +110,7 @@ export default function CameraPage() {
             ) : (
               <>
                 <Button onClick={processImage} disabled={isProcessing}>
-                  {isProcessing ? "'Processing...'" : "'Identify Building'"}
+                  {isProcessing ? "Processing..." : "Identify Building"}
                 </Button>
                 <Button variant="outline" onClick={retake}>
                   <RotateCw className="mr-2 h-4 w-4" /> Retake
@@ -150,4 +150,3 @@ export default function CameraPage() {
     </div>
   )
 }
-
