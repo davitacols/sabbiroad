@@ -1,7 +1,25 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
-// Mock database for demonstration purposes
-const buildingsDatabase = [
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+const BASE_GOOGLE_MAPS_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
+
+interface Coordinates {
+    lat: number;
+    lng: number;
+}
+
+interface Building {
+    name: string;
+    location: string;
+    yearConstructed: number | null; // Allow null for data from Google Maps
+    height: string | null;
+    architect: string | null;
+    description: string | null;
+    address?: string;
+    coordinates: Coordinates;
+}
+
+const buildingsDatabase: Building[] = [
   {
     name: "Empire State Building",
     location: "New York City, NY",
@@ -28,24 +46,74 @@ const buildingsDatabase = [
       lng: 55.2744
     }
   }
-]
+];
 
-export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams
-  const search = searchParams.get("'search'")
+async function searchGoogleMaps(search: string): Promise<Building | null> {
+    if (!GOOGLE_MAPS_API_KEY) {
+        return null; // Don't search if API key is missing
+    }
 
-  if (!search) {
-    return NextResponse.json({ error: "'Search term is required'" }, { status: 400 })
-  }
+    try {
+        const url = `${BASE_GOOGLE_MAPS_URL}address=${encodeURIComponent(search)}&key=${GOOGLE_MAPS_API_KEY}`;
+        console.log("Fetching from Google Maps:", url);
+        const response = await fetch(url);
 
-  const building = buildingsDatabase.find(b => 
-    b.name.toLowerCase().includes(search.toLowerCase())
-  )
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Google Maps API Error: ${response.status} - ${errorText}`);
+            return null;
+        }
 
-  if (!building) {
-    return NextResponse.json({ error: "'Building not found'" }, { status: 404 })
-  }
+        const data = await response.json();
 
-  return NextResponse.json(building, { status: 200 })
+        if (data.status === 'OK' && data.results && data.results.length > 0) {
+            const result = data.results[0];
+            return {
+                name: result.formatted_address,
+                location: result.formatted_address,
+                yearConstructed: null,
+                height: null,
+                architect: null,
+                description: null,
+                address: result.formatted_address,
+                coordinates: result.geometry.location,
+            };
+        } else {
+            console.error("Google Maps API returned no results or non-OK status:", data.status);
+            return null;
+        }
+    } catch (error) {
+        console.error("Error during Google Maps API call:", error);
+        return null;
+    }
 }
 
+export async function GET(request: NextRequest) {
+    const searchParams = request.nextUrl.searchParams;
+    const search = searchParams.get('search');
+
+    if (!search) {
+        return NextResponse.json({ error: 'Search term is required' }, { status: 400 });
+    }
+
+    const trimmedSearch = search.toLowerCase().trim();
+
+    // 1. Search in the database
+    let building = buildingsDatabase.find(b => {
+        const nameMatch = b.name.toLowerCase().trim().includes(trimmedSearch);
+        const addressMatch = b.address?.toLowerCase().trim().includes(trimmedSearch) || false;
+        return nameMatch || addressMatch;
+    });
+
+    // 2. If not found in database, search Google Maps
+    if (!building) {
+        building = await searchGoogleMaps(search);
+        if(!building) return NextResponse.json({ error: 'Building not found' }, { status: 404 });
+    }
+    else if (!building.address && GOOGLE_MAPS_API_KEY) {
+        const googleBuilding = await searchGoogleMaps(building.name + " " + building.location)
+        if (googleBuilding) building.address = googleBuilding.address
+    }
+
+    return NextResponse.json(building, { status: 200 });
+}

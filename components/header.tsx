@@ -59,7 +59,7 @@ export function Header() {
             className="hidden sm:inline-flex text-gray-300 hover:text-white"
             asChild
           >
-            <Link href="/login">Sign In</Link>
+            <Link href="/signin">Sign In</Link>
           </Button>
           <Button
             className="hidden sm:inline-flex bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:bg-gradient-to-l"
@@ -91,7 +91,7 @@ export function Header() {
               ))}
               <DropdownMenuItem asChild className="sm:hidden">
                 <Link
-                  href="/login"
+                  href="/signin"
                   className="text-gray-400 hover:text-white cursor-pointer"
                 >
                   Sign In
