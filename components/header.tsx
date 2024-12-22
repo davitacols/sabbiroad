@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { Building, Upload, Camera, Search, Database, Menu } from 'lucide-react';
+import Image from 'next/image';
+import { Upload, Camera, Search, Database, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import {
@@ -26,9 +27,13 @@ export function Header() {
           href="/"
           className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
         >
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-            <Building className="h-6 w-6 text-white" />
-          </div>
+          <Image
+            src="/logo.png" // Updated path
+            alt="SABIROAD Logo"
+            width={40}
+            height={40}
+            className="rounded-lg"
+          />
           <span className="font-bold text-xl bg-gradient-to-r from-white to-gray-300 text-transparent bg-clip-text">
             SABIROAD
           </span>
@@ -38,7 +43,7 @@ export function Header() {
         <nav className="hidden lg:block">
           <ul className="flex items-center space-x-8">
             {NAV_ITEMS.map(({ title, url, Icon }) => (
-              <li key={String(url)}>
+              <li key={url}>
                 <Link
                   href={url}
                   className="flex items-center space-x-2 text-sm font-medium text-gray-400 hover:text-white transition-colors"
@@ -80,7 +85,7 @@ export function Header() {
               className="w-48 bg-black/90 backdrop-blur-lg border-white/5"
             >
               {NAV_ITEMS.map(({ title, url }) => (
-                <DropdownMenuItem key={String(url)} asChild>
+                <DropdownMenuItem key={url} asChild>
                   <Link
                     href={url}
                     className="text-gray-400 hover:text-white cursor-pointer"

@@ -1,35 +1,38 @@
-"use client";
+import React, { useEffect, useRef } from "react";
 
-import { useEffect, useRef } from "react";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-
-interface MapComponentProps {
+// Define the component props
+type MapComponentProps = {
   lat: number;
   lng: number;
   name: string;
-}
+};
 
-export const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, name }) => {
-  const mapRef = useRef<HTMLDivElement>(null);
+export const MapComponent = ({ lat, lng, name }: MapComponentProps) => {
+  const mapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && mapRef.current) {
-      const map = L.map(mapRef.current).setView([lat, lng], 13);
+    if (mapRef.current && window.google) {
+      // Initialize the map
+      const map = new google.maps.Map(mapRef.current, {
+        center: { lat, lng },
+        zoom: 15, // Zoom level
+      });
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(map);
+      // Create a marker
+      const marker = new google.maps.Marker({
+        position: { lat, lng },
+        map,
+        title: name,
+      });
 
-      L.marker([lat, lng])
-        .addTo(map)
-        .bindPopup(name)
-        .openPopup();
+      // Optionally, you can add an info window to display the name
+      const infoWindow = new google.maps.InfoWindow({
+        content: name,
+      });
 
-      return () => {
-        map.remove();
-      };
+      marker.addListener("click", () => {
+        infoWindow.open(map, marker);
+      });
     }
   }, [lat, lng, name]);
 

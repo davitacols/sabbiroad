@@ -17,6 +17,7 @@
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.4",
+    "@react-google-maps/api": "^2.20.3",
     "@tensorflow-models/mobilenet": "^2.1.1",
     "@tensorflow/tfjs": "^4.22.0",
     "@tensorflow/tfjs-node": "^4.22.0",
